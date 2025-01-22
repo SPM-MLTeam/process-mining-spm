@@ -1,0 +1,6 @@
+message: "If you use this software, please cite the it as below."
+authors: 
+  - name: "Sber Process Mining Team"
+title: "Sber Process Mining"
+version: 3.4.0
+url: "https://github.com/SPM-MLTeam/process-mining-spm"

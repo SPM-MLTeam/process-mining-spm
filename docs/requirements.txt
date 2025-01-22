@@ -1,0 +1,14 @@
+# autodoc2 
+# numpydoc #api 
+myst_parser # work with md
+sphinx_simplepdf #  extension for  build pdf
+sphinx_design  # adвitional function for md
+nbsphinx #jupyter
+sphinx_togglebutton
+sphinx_copybutton
+sphinx_tabs
+rst2pdf
+sphinx_gallery
+pydata_sphinx_theme
+myst-parser[linkify]
+matplotlib==3.9.*

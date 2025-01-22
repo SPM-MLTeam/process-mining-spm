@@ -1,0 +1,23 @@
+.bd-container__inner.bd-page-width {
+    max-width: 100% !important;
+}
+.bd-page-width {
+    max-width: 100% !important;
+}
+.bd-sidebar-primary {
+    max-width: 20%;
+}
+.bd-main .bd-content .bd-article-container {
+    max-width: 100em;
+}
+
+ul.nav {
+    flex-wrap: nowrap;
+}
+
+.bd-sidebar-primary {
+    flex-direction: unset;
+}
+.width60 {
+    width: 60%;
+}

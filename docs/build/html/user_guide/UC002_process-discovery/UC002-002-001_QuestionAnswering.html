@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ru" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NLP каскад. Вопросно-ответная система (Question &amp; Answering) &#8212; документация Sberpm 3.4.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=930d22d0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=4e5996d4"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=97f0b27d"></script>
+    <script>let toggleHintShow = 'Раскрыть';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/translations.js?v=9bfe3ffa"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/UC002_process-discovery/UC002-002-001_QuestionAnswering';</script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+    <link rel="next" title="NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)" href="UC002-002-002_LabelPropagation.html" />
+    <link rel="prev" title="NLP каскад в Process Mining" href="UC002-002.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ru"/>
+  <meta name="docsearch:version" content="3.4.0" />
+    <meta name="docbuild:last-update" content=" 22 янв. 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Перейти к основному содержанию</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Навигация по сайту">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Process mining от Сбера</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Начало работы
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Руководство пользователя
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://developers.sber.ru/portal/products/sber-process-mining?box=true">
+    Process Mining в каталоге продуктов Sber
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Поиск" aria-label="Поиск" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Поиск</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="светлая"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="темная"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/sberpm/" title="SberPM Python Library" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">SberPM Python Library</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Поиск" aria-label="Поиск" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Поиск</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="На этой странице">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Начало работы
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Руководство пользователя
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://developers.sber.ru/portal/products/sber-process-mining?box=true">
+    Process Mining в каталоге продуктов Sber
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="светлая"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="темная"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/sberpm/" title="SberPM Python Library" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">SberPM Python Library</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="В этом разделе">
+  <p class="bd-links__title" role="heading" aria-level="1">В этом разделе</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../UC001_handling-event-data/index.html">Инструменты для подготовки и визуализации лога процесса</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Исследование процесса с помощью инструментов Process Mining</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="UC002-001.html">Классическое машинное обучение в Process Mining</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="UC002-002.html">NLP каскад в Process Mining</a><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">NLP каскад. Вопросно-ответная система (Question &amp; Answering)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UC002-002-002_LabelPropagation.html">NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Хлебная крошка" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Главная">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Руководство пользователя</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Исследование процесса с помощью инструментов Process Mining</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="UC002-002.html" class="nav-link">NLP каскад в Process Mining</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">NLP каскад. Вопросно-ответная система (Question &amp; Answering)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="nlp-question-answering">
+<h1>NLP каскад. Вопросно-ответная система (Question &amp; Answering)<a class="headerlink" href="#nlp-question-answering" title="Ссылка на этот заголовок">#</a></h1>
+<p><img alt="Machine Learning" src="https://img.shields.io/badge/Machine%20Learning-indianred?style=for-the-badge" /> <img alt="Exploratory data analysis" src="https://img.shields.io/badge/Exploratory%20data%20analysis-steelblue?style=for-the-badge" /> <img alt="Pretrained" src="https://img.shields.io/badge/Pretrained-gray?style=for-the-badge" /></p>
+<blockquote>
+<div><p>Модуль решает задачу <code class="docutils literal notranslate"><span class="pre">extractive</span> <span class="pre">Q&amp;A</span></code> - поиска ответа в тексте на заданный вопрос. Языковая модель найдет часть текста, которая максимально близко отвечает на вопрос, и вернет ее пользователю.</p>
+</div></blockquote>
+<div class="tip admonition">
+<p class="admonition-title">Идея для анализа бизнес-процесса</p>
+<p>Текстовые атрибуты лога могут быть богаты на инсайты. Однако обычно они представлены в свободной форме и их обработка вручную затруднена. Кроме того в тексте могут упоминаться причины возникновения проблем, комментарии по положительным изменениям или описания решений проблем, и, если анализировать их вместе, не разделяя, можно придти к неправильным выводам. Подход Q&amp;A позволяет задать вопрос к тексту и извлечь из него только необходимую информацию, то есть - ответ на заданный вопрос. С извлеченными ответами далее можно работать, как обычно - кластеризовать, выделить тематические направления либо построить карту слов.</p>
+</div>
+<p>В рамках библиотеки данная модель реализована как модуль <code class="docutils literal notranslate"><span class="pre">sberpm.nlp.qa_extractor</span></code>.</p>
+<section id="id1">
+<h2>Формализация задачи для анализа процессов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">#</a></h2>
+<p>Зачастую лог автоматизированной системы фиксирует обращения пользователя по возникающим в процессе проблемам, например, при подаче заявки. В случае, если обращения не типизированы, в логе обязательно присутствует колонка со свободным текстовым полем, которое не ограничено количеством допустимых символов или слов.</p>
+</section>
+<section id="id2">
+<h2>Алгоритм в основе модуля<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">#</a></h2>
+<p>Языковая модель может быть особенно полезна в случае, когда текст содержит большое количество информации, а анализ (например, кластеризацию) необходимо провести только по какой-то смысловой части в нем.</p>
+<div class="info admonition">
+<p class="admonition-title">Extractive Q&amp;A</p>
+<p>Extractive Q&amp;A - это класс задач, который предполагает выявление и извлечение ответа на вопрос непосредственно из текста без генерации. Языковая модель не имеет особенностей реализации для домена Process Mining, является универсальной.</p>
+</div>
+<p>В таком случае, целесообразно применить модель на текстовую колонку несколько раз, задавая разные вопросы, чтобы появилась возможность анализировать каждый смысловой блок отдельно.
+Полученные кластеры с каждого смыслового блока можно затем использовать в качестве факторов уже в новой кластеризации.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id6">
+<caption><span class="caption-text">Пример использования Q&amp;A</span><a class="headerlink" href="#id6" title="Ссылка на эту таблицу">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Текст обращения</p></th>
+<th class="head"><p>Вопрос, который задаем для упрощения текста</p></th>
+<th class="head"><p>Ответ модели Q&amp;A</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Получаем некорректные данные от подразделения А, приходится перепроверять</p></td>
+<td><p>С какой проблемой обратился пользователь?</p></td>
+<td><p>некорректные данные</p></td>
+</tr>
+<tr class="row-odd"><td><p>Получаем некорректные данные от подразделения А, приходится перепроверять</p></td>
+<td><p>Кто виноват?</p></td>
+<td><p>подразделения А</p></td>
+</tr>
+<tr class="row-even"><td><p>Сложно довериться данным, которые загружает менеджер Максим, их невозможно проверить</p></td>
+<td><p>С какой проблемой обратился пользователь?</p></td>
+<td><p>невозможно проверить</p></td>
+</tr>
+<tr class="row-odd"><td><p>Сложно довериться данным, которые загружает менеджер Максим, их невозможно проверить</p></td>
+<td><p>Кто виноват?</p></td>
+<td><p>менеджер Максим</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Вопрос рекомендуется задавать четко и односложно, используя тот же стиль, в котором написан текст, не рекомендуется в одном вопросе использовать подвопросы и уточнения.</p>
+<section id="id3">
+<h3>Технический ландшафт<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">#</a></h3>
+<p>Впервые архитектура трансформеров была опубликована в июне 2017. Основной фокус оригинального исследования был сосредоточен на задачах перевода. Эта публикация повлекла за собой несколько влиятельных моделей: GPT (2018), BERT (2018), T5 (2019), GPT-3 (2020).</p>
+<p>Все модели трансформеров, упомянутые выше (GPT, BERT, BART, T5, etc.) обучены как языковые модели (англ. language models). Это означает, что они обучены на огромном количестве текста, используя технику самостоятельного обучения (англ. self-supervised learning). Самостоятельное обучение - это такой способ обучения, в котором цель обучения автоматически вычисляется на основе входных данных - то есть люди не размечают данные.</p>
+<p>Такой тип моделей реализует статистическое понимание языка, на котором он был обучен, но он не очень полезен для конкретных практических задач. Из-за этого базовая предварительно обученная модель потом подвергается процедуре, называемой трансферным обучением (англ. transfer learning). В ходе этого процесса модель настраивается под конкретные наблюдения, т.е. размеченными человеком данными для конкретной задачи.</p>
+<p>Подробнее про архитектуры трансформеров можно прочитать <a class="reference external" href="https://huggingface.co/learn/nlp-course/ru/chapter1/4">здесь</a>.</p>
+<p>Для решения задачи Q&amp;A модель вида трансформер проходит процедуру дообучения на данных вида «Вопрос» (Question) - «Ответ» (Answer), отчего задача и получила такое название. Важно отметить, что в качестве ответа указывается конкретная позиция начала и окончания из исходного текста, то есть решается задача извлечения, а не генерации текста (англ. extraction).</p>
+<p>Рекомендованная архитектура модели: <a class="reference external" href="https://arxiv.org/pdf/2111.09543v4">mDeBERTaV3: Improving DeBERTa using ELCTRA pre-training with gradient disentangled embedding sharing</a>.</p>
+</section>
+<section id="id4">
+<h3>Модификация параметров алгоритма<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id7">
+<caption><span class="caption-text">Параметры модели</span><a class="headerlink" href="#id7" title="Ссылка на эту таблицу">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Параметр</p></th>
+<th class="head"><p>Интерпретация</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary">Вопрос</span></p></td>
+<td><p>Вопрос в свободной форме. Четкий, предполагающий односложный ответ.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Название текстовой колонки</span></p></td>
+<td><p>Поскольку используемая модель является контекстной, необходимо, чтобы текст в указанной колонке был похож на предложение-повествование. Предложений может быть несколько, но ожидается, что они связаны по смыслу. С перечислениями слов и фраз модель тоже работает, но значительно хуже.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Путь к модели</span></p></td>
+<td><p>К использованию подходят любые модели, имеющие архитектуру упомянутого типа. Рекомендуется использовать mdeberta-v3.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h3>Краевые случаи и ограничения<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">#</a></h3>
+<p>Рекомендуется:</p>
+<ul class="simple">
+<li><p>выполнять тестовый прогон для сформулированного вопроса на небольшой части датасета, чтобы убедиться, что его формулировка корректна и модель понимает его правильно;</p></li>
+<li><p>если необходимо - переформулируйте вопрос, до того как выполните запуск на полном датасете;</p></li>
+</ul>
+<p>Стоит иметь в виду, что:</p>
+<ul class="simple">
+<li><p>модель возвращает ответ ровно так, как в исходном тексте, не изменяя форму слова;</p></li>
+<li><p>модель возвращается только одно подходящее вхождение (слово или набор слов), и, если далее по тексту встречается фраза, которая также может являться ответом, в выдачу она уже не попадёт. Например: при вопросе «Кто обработал заявки?» к тексту «Менеджер Иванов, Петров обработали 100 заявок. А менеджер Марина 10», модель может ответить так: «Менеджер Иванов, Петров», либо так: «менеджер Марина»;</p></li>
+<li><p>модель всегда возвращает ответ (иначе говоря - не может не ответить), в связи с чем ответы иногда могут быть не релевантны.</p></li>
+<li><p>языковая модель, которую использует модуль, относится к контекстным, то есть умеет работать с синонимами, антонимами и так далее (другими словами - опирается на контекст). Такие модели хуже работают с канцеляризмами, жаргонизмами, большим количеством аббревиатур и специальных терминов;</p></li>
+<li><p>при использовании маловесных языковых моделей внутри модуля ответы ухудшаются, поскольку такие модели «знают мир хуже» (обучены на малых данных, «видели» меньше слов и их употреблений);</p></li>
+<li><p>при использовании маловесных языковых моделей могут возникнуть сложности с длинными текстами, поскольку такие модели «не имеют памяти» (не хранят достаточно информации, что упоминалось в тексте ранее, поэтому теряется смысл);</p></li>
+<li><p>при использовании тяжелых языковых моделей внутри модуля время обработки и потребляемая память значительно увеличиваются.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="UC002-002.html"
+       title="предыдущая страница">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">назад</p>
+        <p class="prev-next-title">NLP каскад в Process Mining</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="UC002-002-002_LabelPropagation.html"
+       title="следующая страница">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">вперёд</p>
+        <p class="prev-next-title">NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> На этой странице
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Формализация задачи для анализа процессов</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Алгоритм в основе модуля</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Технический ландшафт</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Модификация параметров алгоритма</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Краевые случаи и ограничения</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Копирайт 2024, Team Sber Process Mining.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="last-updated">
+  Обновлено:  22 янв. 2025.
+  <br/>
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

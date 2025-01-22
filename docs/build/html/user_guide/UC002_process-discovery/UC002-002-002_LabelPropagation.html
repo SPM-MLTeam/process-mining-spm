@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ru" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NLP каскад. Разметка текста по образцу или Классификация (Label Propagation) &#8212; документация Sberpm 3.4.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=930d22d0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=4e5996d4"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=97f0b27d"></script>
+    <script>let toggleHintShow = 'Раскрыть';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/translations.js?v=9bfe3ffa"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/UC002_process-discovery/UC002-002-002_LabelPropagation';</script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+    <link rel="prev" title="NLP каскад. Вопросно-ответная система (Question &amp; Answering)" href="UC002-002-001_QuestionAnswering.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ru"/>
+  <meta name="docsearch:version" content="3.4.0" />
+    <meta name="docbuild:last-update" content=" 22 янв. 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Перейти к основному содержанию</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Навигация по сайту">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Process mining от Сбера</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Начало работы
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Руководство пользователя
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://developers.sber.ru/portal/products/sber-process-mining?box=true">
+    Process Mining в каталоге продуктов Sber
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Поиск" aria-label="Поиск" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Поиск</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="светлая"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="темная"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/sberpm/" title="SberPM Python Library" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">SberPM Python Library</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Поиск" aria-label="Поиск" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Поиск</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="На этой странице">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Начало работы
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Руководство пользователя
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://developers.sber.ru/portal/products/sber-process-mining?box=true">
+    Process Mining в каталоге продуктов Sber
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="светлая"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="темная"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/sberpm/" title="SberPM Python Library" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">SberPM Python Library</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="В этом разделе">
+  <p class="bd-links__title" role="heading" aria-level="1">В этом разделе</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../UC001_handling-event-data/index.html">Инструменты для подготовки и визуализации лога процесса</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Исследование процесса с помощью инструментов Process Mining</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="UC002-001.html">Классическое машинное обучение в Process Mining</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="UC002-002.html">NLP каскад в Process Mining</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="UC002-002-001_QuestionAnswering.html">NLP каскад. Вопросно-ответная система (Question &amp; Answering)</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Хлебная крошка" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Главная">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Руководство пользователя</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Исследование процесса с помощью инструментов Process Mining</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="UC002-002.html" class="nav-link">NLP каскад в Process Mining</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="nlp-label-propagation">
+<h1>NLP каскад. Разметка текста по образцу или Классификация (Label Propagation)<a class="headerlink" href="#nlp-label-propagation" title="Ссылка на этот заголовок">#</a></h1>
+<p><img alt="Machine Learning" src="https://img.shields.io/badge/Machine%20Learning-indianred?style=for-the-badge" /> <img alt="Exploratory data analysis" src="https://img.shields.io/badge/Exploratory%20data%20analysis-steelblue?style=for-the-badge" /> <img alt="Real Time Tune" src="https://img.shields.io/badge/Real%20Time%20Tune-gray?style=for-the-badge" /></p>
+<blockquote>
+<div><p>Модуль решает задачу <code class="docutils literal notranslate"><span class="pre">semi</span> <span class="pre">supervised</span> <span class="pre">разметки</span></code> - на основе частично размеченного датасета модель пытается разметить остальные образцы. Работает для текстовых данных.</p>
+</div></blockquote>
+<div class="tip admonition">
+<p class="admonition-title">Идея для анализа бизнес-процесса</p>
+<p>Текстовые атрибуты лога могут быть богаты на инсайты. Однако обычно они представлены в свободной форме и их обработка вручную затруднена. Часто владелец процесса понимает, на основе каких критериев группируются текстовые атрибуты - например, по месту возникновения проблемы или по исполнителю, по негативной или позитивной обратной связи клиента, либо как-то иначе. Размечать все данные может быть дорого и монотонно, а значит - субъективно. Идея заключается в том, чтобы предоставить модели достоверные образцы для каждой из ожидаемых групп текстов для того, чтобы по образу и подобию она разметила остальные.</p>
+</div>
+<p>В рамках библиотеки данная модель реализована как модуль <code class="docutils literal notranslate"><span class="pre">sberpm.nlp.label_propagation</span></code>.</p>
+<section id="id1">
+<h2>Формализация задачи для анализа процессов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">#</a></h2>
+<p>Работаем с логом автоматизированной системы, в которой фиксируются обращения пользователя по шаблонам. Предположим, что 60% пользователей могут идентифицировать проблему явно и выбирают корректный шаблон, а 40% сомневаются и выбирают вид шаблона «Другая проблема». Мы уверены, что виды шаблонов на 100% покрывают существующие проблемы, поэтому хотим определить правильную категорию каждому обращению, которое попало в шаблон «Другая проблема». В таком случае, при применении алгоритма на текстовый атрибут лога, получаем новый атрибут вида «Группа текстовых комментариев».</p>
+</section>
+<section id="id2">
+<h2>Алгоритм в основе модуля<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">#</a></h2>
+<p>Подход используется в случаях, когда группировка текста необходима строго по экспертной оценке принадлежности к группе от пользователя, другими словами, решается задача классификации (или обучение с учителем).</p>
+<div class="dropdown tip admonition">
+<p class="admonition-title">Теоретическая справка</p>
+<p><strong>Классификация (обучение с учителем)</strong> - задача отнесения объекта по совокупности его характеристик к одному из заранее известных классов.</p>
+</div>
+<section id="id3">
+<h3>Технический ландшафт<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">#</a></h3>
+<p>Решение реализовано в два шага:</p>
+<ol class="arabic simple">
+<li><p>Получение векторного представления текстовых комментариев (те образцы, которые размечены как представители известных групп);</p></li>
+<li><p>Адаптация модели под доменную область на этих образцах (англ. domain adoption) - иными словами, дообучение модели на конкретном контексте, чтобы она могла лучше разделять группы на основе эталонов-образцов;</p></li>
+<li><p>Получение векторного представления для неразмеченной части текста и запуск процедуры предсказания (разметки) на предложенные группы.</p></li>
+</ol>
+<p>Шаги 2 и 3 представляют собой архитектуру сверточной нейронной сети, на вход которой подается текст, внутри нее происходит получение векторного представления, дообучаемого на шаге 2, а на выходе - предсказание известной группы на основе вероятности принадлежности нового неизвестного текста к известным образцам (шаг 3).</p>
+<p><img alt="Alt text" src="../../_images/cnn.png" /></p>
+<p>Для векторизации был выбран подход <a class="reference external" href="https://bpemb.h-its.org/">BPEmb</a>.</p>
+<div class="dropdown tip admonition">
+<p class="admonition-title">Теоретическая справка</p>
+<p>Идея похожа на <a class="reference external" href="https://dl.acm.org/citation.cfm?id=177910.177914">коды Хаффмана</a>. Изначально единица языка - это символ, а словарь - последовательность символов. Шаг за шагом символы попарно объединяются, если встречаются вместе чаще других, и так постепенно пополняется словарь. Разновидности этой токенизации использовались как в GPT2, так и в моделях BERT, RoBERTa. Этот подход позволяет решить проблемы отсутствующих в словаре слов, которые мы не можем закодировать, поскольку слово теперь можно представить по известным частям.</p>
+<p>Далее каждой попавшей в словарь последовательности присваивается вектор, и именно он используется в качестве входных данных для нейронных моделей при обработке естественного языка.</p>
+</div>
+<p>В дальнейших реализациях будут добавлены и другие способы векторизации текста, например, используемые в генеративных моделях (GenAI).</p>
+</section>
+<section id="id4">
+<h3>Модификация параметров алгоритма<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id6">
+<caption><span class="caption-text">Параметры модели</span><a class="headerlink" href="#id6" title="Ссылка на эту таблицу">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Параметр</p></th>
+<th class="head"><p>Пояснение к параметру</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Название текстовой колонки</span></p></td>
+<td><p>Название колонки с текстовыми данными.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Название колонки с разметкой</span></p></td>
+<td><p>Название колонки с размеченными группами.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary">Флаг неразмеченных образцов</span></p></td>
+<td><p>Указание на значение в колонке с разметкой, которым отмечены строки, подлежащие маркировке моделью, например «Разметить» или «Другое».</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary">Путь к модели</span></p></td>
+<td><p>Локальный путь к сериализованной модели. На текущий момент возможно передать путь только для модели класса BPEmb (рекомендуем к использованию ru.wiki.bpe.vs100000.model).</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Путь к токенизатору</span></p></td>
+<td><p>Локальный путь к токенизатору. На текущий момент возможно передать путь только для модели класса BPEmb (рекомендуем к использованию ru.wiki.bpe.vs100000.d300.w2v.bin).</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Размерность</span></p></td>
+<td><p>Размерность вектора для текста. Указывается в соответствие с выбранной моделью. Для рекомендованной на текущий момент составляет 300.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Размер словаря</span></p></td>
+<td><p>Количество токенов, с которыми работает модель. Указывается в соответствие с выбранной моделью. Для рекомендованной на текущий момент составляет 100 000.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Тип токенизатора</span></p></td>
+<td><p>Два вида токенизаторов - sentence_piece и context_embeddings.
+Токенизатор sentence_piece целесообразно применять, если корпус текстов содержит повторяющиеся фразы, включая аббревиатуры и особые термины. В то время как токенизатор context_embeddings предназначен для работы с текстами в стиле повествования, значит, может работать с синонимами и т.д.
+На текущий момент возможно выбрать только sentence_piece, в следующих версиях библиотеки будет добавлена возможность использования контекстных языковых моделей.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary">Размер батча</span></p></td>
+<td><p>Количество текстов, которые используются в одной эпохе обучения в процессе адаптации модели под домен. Если текстов достаточно, значение параметра можно не изменять, иначе - понизить.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Доля текстов для подсчета длины образца</span></p></td>
+<td><p>Параметр для указания того, какая доля текстов будет участвовать в расчете типовой длины образца текстов. Необходимо для того, чтобы унифицировать слишком длинные образцы и очень короткие.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="sd-sphinx-override sd-badge sd-outline-dark sd-text-dark">Количество эпох</span></p></td>
+<td><p>Количество итераций адаптации языковой модели под домен. Адаптация (иначе - дообучение) необходимо для того, чтобы модель адаптировала свои знания под текстовый датасет и токены, которые она раньше «не видела». При малом количестве размеченных текстов не рекомендуется увеличивать параметр.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h3>Краевые случаи и ограничения<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">#</a></h3>
+<p>Важно, чтобы модель научилась различать группы текстов, то есть необходимо, чтобы она увидела достаточное количество образцов для идентификации закономерностей и особенностей каждой из групп. Необходимо иметь в виду следующее:</p>
+<ol class="arabic simple">
+<li><p>Уникальных примеров текстов на каждую группу должно быть не менее 3 (учимся, проверяем, считаем общую метрику на валидации), но крайне рекомендуется больше.</p></li>
+<li><p>Рекомендуемое количество размеченных примеров - 30-40% датасета.</p></li>
+<li><p>Не обязательно размечать одинаковое количество текстов каждой группы, но допускать сильный дисбаланс групп не желательно (модель будет склонна предсказывать более частую группу, так как математически шанс ответить «правильно» выше).</p></li>
+</ol>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Параметр</strong></p></th>
+<th class="head"><p><strong>Проблема</strong></p></th>
+<th class="head"><p><strong>Возможное Решение</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>{bdg-light-line}<strong>Доля текстов для подсчета средней длины образца</strong>``</p></td>
+<td><p>Мало образцов текста для класса</p></td>
+<td><p>Это количество текстов из выборки, на основе которых будет определяться типовая длина предложения (а точнее - количество токенов в нем, при этом токен != слово). По дефолту, при расчете типовой длины исключается 5% самых длинных предложений, а максимальное значение из оставшихся и является типовой длиной. Затем 5% предложений, которые исключались при расчете, сокращаются справа до типовой длины. Бывает так, что тексты начинаются одинаково, и при условии удаления 5% токенов сверх установленной длины вновь появляются дубликаты текстов, а иногда даже тексты, размеченные разными группами. Рекомендуется удалять одинаковые части текста в начале, если они известны. Другой вариант обхода этого исключения - выставить порог 1.0 и взять 100% текстов для подсчета длины, в таком случае типовым образцом будет считаться самый длинный в выборке. Более предпочтительным считаем первое предложенное решение.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="UC002-002-001_QuestionAnswering.html"
+       title="предыдущая страница">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">назад</p>
+        <p class="prev-next-title">NLP каскад. Вопросно-ответная система (Question &amp; Answering)</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> На этой странице
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Формализация задачи для анализа процессов</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Алгоритм в основе модуля</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Технический ландшафт</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Модификация параметров алгоритма</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Краевые случаи и ограничения</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Копирайт 2024, Team Sber Process Mining.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="last-updated">
+  Обновлено:  22 янв. 2025.
+  <br/>
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

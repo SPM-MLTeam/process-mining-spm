@@ -1,0 +1,10 @@
+{
+  "pm_python_library_url": "https://pypi.org/project/sberpm/",
+  "pm_root_url": "/analytics/",
+  "use_edit_page_button": false,
+  "announcement": "",
+  "tech_radar_url": "/tutorials/_static/tech-radar/index.html",
+  "exclude_patterns": [
+
+  ]
+}

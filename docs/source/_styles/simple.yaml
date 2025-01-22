@@ -1,0 +1,18 @@
+fontsAlias:
+    fontSerifBold: DejaVu Serif Condensed Bold
+    fontSerifBoldItalic: DejaVu Serif Condensed Bold Italic
+    fontSerif: DejaVu Serif Condensed
+    fontSerifItalic: DejaVu Serif Condensed Italic
+
+    fontMono: DejaVu Sans Mono
+    fontMonoBold: DejaVu Sans Mono Bold
+    fontMonoBoldItalic: DejaVu Sans Mono Bold Oblique
+    fontMonoItalic: DejaVu Sans Mono Oblique
+
+    fontSans: DejaVu Sans
+    fontSansBold: DejaVu Sans Bold
+    fontSansBoldItalic: DejaVu Sans Bold Italic
+    fontSansItalic: DejaVu Sans Bold
+
+pageSetup:
+    size: A4
