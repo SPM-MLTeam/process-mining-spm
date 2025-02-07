@@ -18,7 +18,7 @@ pip install sberpm
 ```
 To install from sources:
 ```bash
-git clone https://github.com/SberProcessMining/Sber_Process_Mining.git
+git clone https://github.com/SPM-MLTeam/process-mining-spm.git
 
 cd Sber_Process_Mining
 pip install .
