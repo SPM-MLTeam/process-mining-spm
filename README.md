@@ -1,4 +1,4 @@
-![](https://github.com/SPM-MLTeam/process-mining-spm/blob/main/imgs/Logo.png?raw=true)
+
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sberpm)](https://pypi.org/project/sberpm)
 [![PyPI - Version](https://img.shields.io/pypi/v/sberpm)](https://pypi.org/project/sberpm)
@@ -15,13 +15,6 @@ Authors: Sber Process Mining Team.
 To install SberPM framework on your machine from PyPI:
 ```bash
 pip install sberpm
-```
-To install from sources:
-```bash
-git clone https://github.com/SPM-MLTeam/process-mining-spm.git
-
-cd Sber_Process_Mining
-pip install .
 ```
 
 Additionally, you have to install graphviz executables and add the path to the executables to PATH variable:  
